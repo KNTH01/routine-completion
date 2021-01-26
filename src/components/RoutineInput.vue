@@ -16,9 +16,8 @@
 </template>
 
 <script setup>
-import logoUrl from '~/assets/logo.svg'
 import { ref } from 'vue'
-
+import logoUrl from '~/assets/logo.svg'
 const message = ref('')
 </script>
 

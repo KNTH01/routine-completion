@@ -7,6 +7,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "ky": "^0.26.0",
     "vue": "^3.0.5"
   },
   "devDependencies": {
