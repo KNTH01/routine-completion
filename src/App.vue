@@ -5,7 +5,7 @@
         <div class="relative">
           <input
             placeholder="What will you pick?"
-            class="w-full px-6 py-4 text-2xl focus:ring focus:ring-routine-gray-3 focus:outline-none bg-routine-gray-1 placeholder-routine-gray-3"
+            class="w-full px-6 py-4 text-2xl focus:ring focus:ring-routine-gray-3 focus:outline-none bg-routine-gray-1 placeholder-routine-gray-3 caret-routine-blue"
             type="text"
           />
 
