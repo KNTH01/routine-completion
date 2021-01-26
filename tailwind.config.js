@@ -13,6 +13,7 @@ module.exports = {
         'routine-black': '#444',
         'routine-blue': '#4754DC',
         'routine-gray-1': '#F6F3EE',
+        'routine-gray-2': '#A9A9A9',
         'routine-gray-3': '#BBB2A1',
         'routine-gray-4': '#D3CDB8',
       },
