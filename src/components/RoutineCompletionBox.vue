@@ -28,7 +28,7 @@ import {
 } from '~/composables/use-completions'
 import { useEditor } from '~/composables/use-editor'
 
-const { query, setQuery, showCompletionBox } = useCompletionStore()
+const { query, setQuery, showCompletionBox, setComplete } = useCompletionStore()
 const { completions, fetchCompletions, fetching } = useCompletions(query)
 const { editor } = useEditor()
 
@@ -52,6 +52,7 @@ const complete = (completionPhrase) => {
   }
 
   setQuery('')
+  setComplete()
 }
 </script>
 

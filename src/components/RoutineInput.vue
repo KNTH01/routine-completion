@@ -7,7 +7,8 @@
     <div
       class="absolute inset-y-0 right-0 flex items-center pr-6 pointer-events-none"
     >
-      <img :src="logoUrl" alt="Routine logo" />
+      <img v-if="isCompleted" :src="completedIconUrl" alt="Completed" />
+      <img v-else :src="logoUrl" alt="Routine logo" />
     </div>
   </div>
 </template>
@@ -27,9 +28,10 @@ import { onMounted, ref } from 'vue'
 import { useCompletionStore } from '~/composables/use-completions'
 import { useEditor } from '~/composables/use-editor'
 import logoUrl from '~/assets/logo.svg'
+import completedIconUrl from '~/assets/completedIcon.svg'
 
 const message = ref('')
-const { setQuery } = useCompletionStore()
+const { setQuery, isCompleted, setUncomplete } = useCompletionStore()
 const { editor, setEditor } = useEditor()
 
 const updateContent = () => {
@@ -121,6 +123,8 @@ const updateContent = () => {
     contentJSON.content[0] = paragraphContent
     commands.setContent(contentJSON)
   }
+
+  setUncomplete()
 }
 
 onMounted(() => {

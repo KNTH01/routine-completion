@@ -2,6 +2,7 @@ import { computed, ref } from 'vue'
 import useFetch from './use-fetch'
 
 const query = ref('')
+const isCompleted = ref(false)
 
 export const useCompletionStore = () => {
   return {
@@ -9,7 +10,16 @@ export const useCompletionStore = () => {
     setQuery(newQuery) {
       query.value = newQuery
     },
+
     showCompletionBox: computed(() => query.value.trim() !== ''),
+
+    isCompleted: computed(() => isCompleted.value),
+    setComplete() {
+      isCompleted.value = true
+    },
+    setUncomplete() {
+      isCompleted.value = false
+    },
   }
 }
 
