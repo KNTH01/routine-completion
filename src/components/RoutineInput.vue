@@ -2,6 +2,13 @@
   <p class="py-4 text-gray-100">
     <span class="text-gray-500">Message:</span> {{ message }}
   </p>
+  <div class="p-4 my-16 bg-routine-gray-1">
+    <p
+      class="inline-flex px-3 py-1 font-medium rounded text-routine-black bg-routine-black bg-opacity-10"
+    >
+      Dracofeu
+    </p>
+  </div>
   <div class="relative group">
     <div
       class="w-full px-6 py-4 text-2xl rounded editor group-focus:ring group-focus:ring-routine-gray-3 group-focus:outline-none bg-routine-gray-1 caret-routine-blue"
@@ -34,7 +41,7 @@ const message = ref('')
 const editor = ref(null)
 
 const updateContent = () => {
-  const KEYWORD = 'i pick you'
+  const KEYWORD = 'i pick you '
   const commands = editor.value.commands
   const contentJSON = editor.value.getJSON()
   let updateContent = false
@@ -47,27 +54,50 @@ const updateContent = () => {
 
   if (searchKeywordPos > -1) {
     if (paragraphContent.content?.length === 1) {
-      const userKeyword = contentJSON.content[0].content[0].text.substr(
+      const userKeyword = paragraphContent.content[0].text.substr(
         searchKeywordPos,
         KEYWORD.length
       )
-      contentJSON.content[0].content[0].text = contentJSON.content[0].content[0].text.replace(
+      paragraphContent.content[0].text = paragraphContent.content[0].text.replace(
         userKeyword,
         ''
       )
-      contentJSON.content[0].content.push({
+      paragraphContent.content.push({
         type: 'text',
         marks: [{ type: 'textCls', attrs: { class: 'text-routine-blue' } }],
         text: userKeyword,
       })
-      contentJSON.content[0].content.push({
+      paragraphContent.content.push({
         type: 'text',
-        // marks: [{ type: 'textCls', attrs: { class: '' } }],
+        marks: [
+          {
+            type: 'textCls',
+            attrs: {
+              class:
+                'px-3 py-1 font-medium rounded text-routine-black bg-routine-black bg-opacity-10',
+            },
+          },
+        ],
         text: ' ',
       })
+
       updateContent = true
+    } else {
+      const queryNodePosition =
+        paragraphContent.content.findIndex(
+          (content) => content.text.toLowerCase() === KEYWORD
+        ) + 1
+
+      if (paragraphContent.content[queryNodePosition]) {
+        if (paragraphContent.content[queryNodePosition].text.includes(' ')) {
+          updateContent = true
+        }
+
+        const query = paragraphContent.content[queryNodePosition].text.trim()
+        paragraphContent.content[queryNodePosition].text = query
+      }
     }
-  } else {
+  } else if (paragraphContent?.content?.length > 1) {
     paragraphContent.content = [
       {
         type: 'text',
