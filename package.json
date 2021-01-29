@@ -7,6 +7,11 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@tiptap/core": "^2.0.0-alpha.12",
+    "@tiptap/extension-document": "^2.0.0-alpha.6",
+    "@tiptap/extension-paragraph": "^2.0.0-alpha.6",
+    "@tiptap/extension-text": "^2.0.0-alpha.6",
+    "@tiptap/starter-kit": "^2.0.0-alpha.8",
     "ky": "^0.26.0",
     "vue": "^3.0.5"
   },

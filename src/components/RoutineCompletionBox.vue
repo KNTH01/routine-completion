@@ -1,31 +1,60 @@
 <template>
-  <div class="max-w-lg py-12">
+  <div class="max-w-lg py-4" v-if="showCompletionBox">
     <div class="w-full p-4 rounded bg-routine-gray-1 border-routine-gray-4">
       <div class="pr-4 overflow-y-scroll max-h-48 completion-container">
         <template v-if="completions.length > 0">
-          <div
+          <a
+            href="#"
             v-for="(completion, i) in completions"
             :key="i"
-            class="px-3 py-2 text-sm font-medium rounded-sm cursor-pointer hover:bg-routine-black hover:bg-opacity-10"
+            class="block px-3 py-2 text-sm font-medium rounded-sm cursor-pointer hover:bg-routine-black hover:bg-opacity-10 focus:outline-none focus:bg-routine-black focus:bg-opacity-10"
+            @click.prevent="complete(completion.phrase)"
           >
             {{ completion.phrase }}
-          </div>
+          </a>
         </template>
         <!-- TODO: add loader -->
-        <div v-else class="animate-ping">Loading...</div>
+        <div v-else-if="fetching" class="">Loading...</div>
+        <div v-else class="">No result...</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import useCompletions from '~/composables/use-completions'
+import { watch } from 'vue'
+import {
+  useCompletions,
+  useCompletionStore,
+} from '~/composables/use-completions'
+import { useEditor } from '~/composables/use-editor'
 
-const query = ref('ika')
+const { query, setQuery, showCompletionBox, setComplete } = useCompletionStore()
 const { completions, fetchCompletions, fetching } = useCompletions(query)
+const { editor } = useEditor()
 
-fetchCompletions()
+// TODO: sort completion by score
+watch(query, fetchCompletions)
+
+const complete = (completionPhrase) => {
+  const KEYWORD = 'i pick you '
+  const doc = editor.value.getJSON()
+  const paragraphContent = doc.content[0]
+
+  const queryNodePosition =
+    paragraphContent.content.findIndex(
+      (content) => content.text.toLowerCase() === KEYWORD
+    ) + 1
+
+  if (paragraphContent.content[queryNodePosition]) {
+    paragraphContent.content[queryNodePosition].text = completionPhrase
+    doc.content[0] = paragraphContent
+    editor.value.commands.setContent(doc)
+  }
+
+  setQuery('')
+  setComplete()
+}
 </script>
 
 <style lang="postcss" scoped>
