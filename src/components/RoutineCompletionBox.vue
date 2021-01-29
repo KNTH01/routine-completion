@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-lg py-12" v-if="showCompletionBox">
+  <div class="max-w-lg py-4" v-if="showCompletionBox">
     <div class="w-full p-4 rounded bg-routine-gray-1 border-routine-gray-4">
       <div class="pr-4 overflow-y-scroll max-h-48 completion-container">
         <template v-if="completions.length > 0">
