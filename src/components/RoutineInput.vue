@@ -1,14 +1,4 @@
 <template>
-  <p class="py-4 text-gray-100">
-    <span class="text-gray-500">Message:</span> {{ message }}
-  </p>
-  <div class="p-4 my-16 bg-routine-gray-1">
-    <p
-      class="inline-flex px-3 py-1 font-medium rounded text-routine-black bg-routine-black bg-opacity-10"
-    >
-      Dracofeu
-    </p>
-  </div>
   <div class="relative group">
     <div
       class="w-full px-6 py-4 text-2xl rounded editor group-focus:ring group-focus:ring-routine-gray-3 group-focus:outline-none bg-routine-gray-1 caret-routine-blue"
@@ -20,7 +10,6 @@
       <img :src="logoUrl" alt="Routine logo" />
     </div>
   </div>
-  <button @click="getContent">get content</button>
 </template>
 
 <script setup>
@@ -35,10 +24,12 @@ import {
 import { TextCls } from '~/libs/tiptap/extensions/text-cls'
 
 import { onMounted, ref } from 'vue'
+import { useCompletionStore } from '~/composables/use-completions'
 import logoUrl from '~/assets/logo.svg'
 
 const message = ref('')
 const editor = ref(null)
+const { setQuery } = useCompletionStore()
 
 const updateContent = () => {
   const KEYWORD = 'i pick you '
@@ -93,18 +84,26 @@ const updateContent = () => {
           updateContent = true
         }
 
+        // set query
         const query = paragraphContent.content[queryNodePosition].text.trim()
         paragraphContent.content[queryNodePosition].text = query
+        setQuery(query)
+      } else {
+        setQuery('')
       }
     }
-  } else if (paragraphContent?.content?.length > 1) {
-    paragraphContent.content = [
-      {
-        type: 'text',
-        text: message.value,
-      },
-    ]
-    updateContent = true
+  } else {
+    if (paragraphContent?.content?.length > 1) {
+      paragraphContent.content = [
+        {
+          type: 'text',
+          text: message.value,
+        },
+      ]
+      updateContent = true
+    }
+
+    setQuery('')
   }
 
   if (contentJSON.content.length > 1) {
@@ -119,7 +118,6 @@ const updateContent = () => {
       (content) => content.text !== ''
     )
     contentJSON.content[0] = paragraphContent
-    console.log('UPDATE paragraphContent:', contentJSON.content[0])
     commands.setContent(contentJSON)
   }
 }

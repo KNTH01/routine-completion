@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-lg py-12">
+  <div class="max-w-lg py-12" v-if="showCompletionBox">
     <div class="w-full p-4 rounded bg-routine-gray-1 border-routine-gray-4">
       <div class="pr-4 overflow-y-scroll max-h-48 completion-container">
         <template v-if="completions.length > 0">
@@ -12,20 +12,25 @@
           </div>
         </template>
         <!-- TODO: add loader -->
-        <div v-else class="animate-ping">Loading...</div>
+        <div v-else-if="fetching" class="">Loading...</div>
+        <div v-else class="">No result...</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import useCompletions from '~/composables/use-completions'
+import { watch } from 'vue'
+import {
+  useCompletions,
+  useCompletionStore,
+} from '~/composables/use-completions'
 
-const query = ref('ika')
+const { query, showCompletionBox } = useCompletionStore()
 const { completions, fetchCompletions, fetching } = useCompletions(query)
 
-fetchCompletions()
+// TODO: sort completion by score
+watch(query, fetchCompletions)
 </script>
 
 <style lang="postcss" scoped>
