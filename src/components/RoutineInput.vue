@@ -25,11 +25,12 @@ import { TextCls } from '~/libs/tiptap/extensions/text-cls'
 
 import { onMounted, ref } from 'vue'
 import { useCompletionStore } from '~/composables/use-completions'
+import { useEditor } from '~/composables/use-editor'
 import logoUrl from '~/assets/logo.svg'
 
 const message = ref('')
-const editor = ref(null)
 const { setQuery } = useCompletionStore()
+const { editor, setEditor } = useEditor()
 
 const updateContent = () => {
   const KEYWORD = 'i pick you '
@@ -123,20 +124,18 @@ const updateContent = () => {
 }
 
 onMounted(() => {
-  editor.value = new Editor({
-    element: document.querySelector('.editor'),
-    extensions: [Document, Paragraph, Text, TextCls, PlaceholderExtension],
-    content: placeholder,
+  setEditor(
+    new Editor({
+      element: document.querySelector('.editor'),
+      extensions: [Document, Paragraph, Text, TextCls, PlaceholderExtension],
+      content: placeholder,
 
-    onUpdate({ transaction }) {
-      updateContent()
-    },
-  })
+      onUpdate({ transaction }) {
+        updateContent()
+      },
+    })
+  )
 })
-
-const getContent = () => {
-  console.log(JSON.stringify(editor.value.getJSON()))
-}
 </script>
 
 <style lang="postcss">

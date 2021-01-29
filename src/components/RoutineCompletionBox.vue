@@ -7,6 +7,7 @@
             v-for="(completion, i) in completions"
             :key="i"
             class="px-3 py-2 text-sm font-medium rounded-sm cursor-pointer hover:bg-routine-black hover:bg-opacity-10"
+            @click="complete(completion.phrase)"
           >
             {{ completion.phrase }}
           </div>
@@ -25,12 +26,33 @@ import {
   useCompletions,
   useCompletionStore,
 } from '~/composables/use-completions'
+import { useEditor } from '~/composables/use-editor'
 
-const { query, showCompletionBox } = useCompletionStore()
+const { query, setQuery, showCompletionBox } = useCompletionStore()
 const { completions, fetchCompletions, fetching } = useCompletions(query)
+const { editor } = useEditor()
 
 // TODO: sort completion by score
 watch(query, fetchCompletions)
+
+const complete = (completionPhrase) => {
+  const KEYWORD = 'i pick you '
+  const doc = editor.value.getJSON()
+  const paragraphContent = doc.content[0]
+
+  const queryNodePosition =
+    paragraphContent.content.findIndex(
+      (content) => content.text.toLowerCase() === KEYWORD
+    ) + 1
+
+  if (paragraphContent.content[queryNodePosition]) {
+    paragraphContent.content[queryNodePosition].text = completionPhrase
+    doc.content[0] = paragraphContent
+    editor.value.commands.setContent(doc)
+  }
+
+  setQuery('')
+}
 </script>
 
 <style lang="postcss" scoped>
