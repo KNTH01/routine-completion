@@ -38,11 +38,7 @@ export const TextCls = Mark.create({
       {
         tag: 'span',
         getAttrs: (element) => {
-          return element.getAttribute('class')
-            ? {
-                cls: element.getAttribute('class'),
-              }
-            : false
+          return element.getAttribute('class') ? {} : false
         },
       },
     ]
