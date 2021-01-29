@@ -3,14 +3,15 @@
     <div class="w-full p-4 rounded bg-routine-gray-1 border-routine-gray-4">
       <div class="pr-4 overflow-y-scroll max-h-48 completion-container">
         <template v-if="completions.length > 0">
-          <div
+          <a
+            href="#"
             v-for="(completion, i) in completions"
             :key="i"
-            class="px-3 py-2 text-sm font-medium rounded-sm cursor-pointer hover:bg-routine-black hover:bg-opacity-10"
-            @click="complete(completion.phrase)"
+            class="block px-3 py-2 text-sm font-medium rounded-sm cursor-pointer hover:bg-routine-black hover:bg-opacity-10 focus:outline-none focus:bg-routine-black focus:bg-opacity-10"
+            @click.prevent="complete(completion.phrase)"
           >
             {{ completion.phrase }}
-          </div>
+          </a>
         </template>
         <!-- TODO: add loader -->
         <div v-else-if="fetching" class="">Loading...</div>
