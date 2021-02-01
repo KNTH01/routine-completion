@@ -33,6 +33,7 @@ import {
 import { useEditor } from '~/composables/use-editor'
 import logoUrl from '~/assets/logo.svg'
 import completedIconUrl from '~/assets/completedIcon.svg'
+import refreshIcon from '~/assets/heroicons-refresh.svg'
 
 const message = ref('')
 const { setQuery, isCompleted, setUncomplete } = useCompletionStore()
