@@ -8,6 +8,7 @@
       class="absolute inset-y-0 right-0 flex items-center pr-6 pointer-events-none"
     >
       <img v-if="isCompleted" :src="completedIconUrl" alt="Completed" />
+      <!-- TODO: hide this when not empty -->
       <img v-else :src="logoUrl" alt="Routine logo" />
     </div>
   </div>

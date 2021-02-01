@@ -33,7 +33,6 @@ const { query, setQuery, showCompletionBox, setComplete } = useCompletionStore()
 const { completions, fetchCompletions, fetching } = useCompletions(query)
 const { editor } = useEditor()
 
-// TODO: sort completion by score
 watch(query, fetchCompletions)
 
 const complete = (completionPhrase) => {

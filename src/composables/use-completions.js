@@ -26,7 +26,17 @@ export const useCompletionStore = () => {
 export const useCompletions = (queryRef) => {
   const { response, error, fetchData, fetching } = useFetch()
   const fetchCompletions = () => fetchData(`completion?query=${queryRef.value}`)
-  const completions = computed(() => response?.value?.completions ?? [])
+  const completions = computed(() => {
+    try {
+      const result = JSON.parse(
+        JSON.stringify(response?.value?.completions ?? [])
+      )
+      return result.sort((a, b) => b.score - a.score)
+    } catch (error) {
+      console.error(error)
+      return []
+    }
+  })
 
   return { completions, error, fetchCompletions, fetching }
 }
