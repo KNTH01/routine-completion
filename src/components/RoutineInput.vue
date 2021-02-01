@@ -96,15 +96,13 @@ const updateContent = () => {
       }
     }
   } else {
-    if (paragraphContent?.content?.length > 1) {
-      paragraphContent.content = [
-        {
-          type: 'text',
-          text: message.value,
-        },
-      ]
-      updateContent = true
-    }
+    paragraphContent.content = [
+      {
+        type: 'text',
+        text: message.value,
+      },
+    ]
+    updateContent = true
 
     setQuery('')
   }

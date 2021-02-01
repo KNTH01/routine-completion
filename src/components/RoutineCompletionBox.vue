@@ -50,10 +50,10 @@ const complete = (completionPhrase) => {
     paragraphContent.content[queryNodePosition].text = completionPhrase
     doc.content[0] = paragraphContent
     editor.value.commands.setContent(doc)
+    editor.value.commands.focus()
+    setQuery('')
+    setComplete()
   }
-
-  setQuery('')
-  setComplete()
 }
 </script>
 
