@@ -9,7 +9,11 @@
     >
       <img v-if="isCompleted" :src="completedIconUrl" alt="Completed" />
       <!-- TODO: hide this when not empty -->
-      <img v-else :src="logoUrl" alt="Routine logo" />
+      <img
+        v-else-if="isEmptyWithPlaceholder"
+        :src="logoUrl"
+        alt="Routine logo"
+      />
     </div>
   </div>
 </template>
@@ -35,10 +39,19 @@ import logoUrl from '~/assets/logo.svg'
 import completedIconUrl from '~/assets/completedIcon.svg'
 import refreshIcon from '~/assets/heroicons-refresh.svg'
 
-const message = ref('')
 const { setQuery, isCompleted, setUncomplete } = useCompletionStore()
 const { editor, setEditor } = useEditor()
 const { QUERY_KEYWORD, findQueryNodePosition } = useCompletionQuery()
+
+const message = ref('')
+const isEmptyWithPlaceholder = ref(true)
+const checkIsEmptyWithPlaceholder = () => {
+  if (editor.value.getHTML() === placeholder) {
+    isEmptyWithPlaceholder.value = true
+  } else {
+    isEmptyWithPlaceholder.value = false
+  }
+}
 
 const updateContent = () => {
   const commands = editor.value.commands
@@ -127,6 +140,7 @@ const updateContent = () => {
     commands.setContent(contentJSON)
   }
 
+  checkIsEmptyWithPlaceholder()
   setUncomplete()
 }
 
@@ -139,6 +153,14 @@ onMounted(() => {
 
       onUpdate() {
         updateContent()
+      },
+
+      onFocus() {
+        checkIsEmptyWithPlaceholder()
+      },
+
+      onBlur() {
+        checkIsEmptyWithPlaceholder()
       },
     })
   )
