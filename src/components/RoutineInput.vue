@@ -26,7 +26,10 @@ import {
 import { TextCls } from '~/libs/tiptap/extensions/text-cls'
 
 import { onMounted, ref } from 'vue'
-import { useCompletionStore } from '~/composables/use-completions'
+import {
+  useCompletionStore,
+  useCompletionQuery,
+} from '~/composables/use-completions'
 import { useEditor } from '~/composables/use-editor'
 import logoUrl from '~/assets/logo.svg'
 import completedIconUrl from '~/assets/completedIcon.svg'
@@ -34,9 +37,9 @@ import completedIconUrl from '~/assets/completedIcon.svg'
 const message = ref('')
 const { setQuery, isCompleted, setUncomplete } = useCompletionStore()
 const { editor, setEditor } = useEditor()
+const { QUERY_KEYWORD, findQueryNodePosition } = useCompletionQuery()
 
 const updateContent = () => {
-  const KEYWORD = 'i pick you '
   const commands = editor.value.commands
   const contentJSON = editor.value.getJSON()
   let updateContent = false
@@ -45,13 +48,13 @@ const updateContent = () => {
   message.value = paragraphContent.content
     ? paragraphContent.content.map((item) => item.text).join('')
     : ''
-  const searchKeywordPos = message.value.toLowerCase().search(KEYWORD)
+  const searchKeywordPos = message.value.toLowerCase().search(QUERY_KEYWORD)
 
   if (searchKeywordPos > -1) {
     if (paragraphContent.content?.length === 1) {
       const userKeyword = paragraphContent.content[0].text.substr(
         searchKeywordPos,
-        KEYWORD.length
+        QUERY_KEYWORD.length
       )
       paragraphContent.content[0].text = paragraphContent.content[0].text.replace(
         userKeyword,
@@ -78,12 +81,12 @@ const updateContent = () => {
 
       updateContent = true
     } else {
-      const queryNodePosition =
-        paragraphContent.content.findIndex(
-          (content) => content.text.toLowerCase() === KEYWORD
-        ) + 1
+      const queryNodePosition = findQueryNodePosition(contentJSON)
 
-      if (paragraphContent.content[queryNodePosition]) {
+      if (
+        queryNodePosition > -1 &&
+        paragraphContent.content[queryNodePosition]
+      ) {
         if (paragraphContent.content[queryNodePosition].text.includes(' ')) {
           updateContent = true
         }
@@ -133,7 +136,7 @@ onMounted(() => {
       extensions: [Document, Paragraph, Text, TextCls, PlaceholderExtension],
       content: placeholder,
 
-      onUpdate({ transaction }) {
+      onUpdate() {
         updateContent()
       },
     })

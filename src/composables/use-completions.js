@@ -40,3 +40,22 @@ export const useCompletions = (queryRef) => {
 
   return { completions, error, fetchCompletions, fetching }
 }
+
+export const useCompletionQuery = () => {
+  const QUERY_KEYWORD = 'i pick you '
+
+  const findQueryNodePosition = (docContent) => {
+    const paragraphContent = docContent.content[0]
+
+    const queryNodePosition = paragraphContent.content.findIndex(
+      (content) => content.text.toLowerCase() === QUERY_KEYWORD
+    )
+
+    return queryNodePosition > -1 ? queryNodePosition + 1 : -1
+  }
+
+  return {
+    QUERY_KEYWORD,
+    findQueryNodePosition,
+  }
+}
