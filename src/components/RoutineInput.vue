@@ -29,7 +29,7 @@ import {
 } from '~/libs/tiptap/extensions/placeholder'
 import { TextCls } from '~/libs/tiptap/extensions/text-cls'
 
-import { onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   useCompletionStore,
   useCompletionQuery,
@@ -164,6 +164,10 @@ onMounted(() => {
       },
     })
   )
+})
+
+onBeforeUnmount(() => {
+  editor.value && editor.value.destroy()
 })
 </script>
 
