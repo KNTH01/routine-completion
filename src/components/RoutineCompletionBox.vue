@@ -13,8 +13,13 @@
             {{ completion.phrase }}
           </a>
         </template>
-        <!-- TODO: add loader -->
-        <div v-else-if="fetching" class="">Loading...</div>
+        <div v-else-if="fetching">
+          <img
+            :src="refreshIcon"
+            alt="Refreshing"
+            class="w-10 h-10 mx-auto animate-spin text-routine-black opacity-10"
+          />
+        </div>
         <div v-else class="">No result...</div>
       </div>
     </div>
@@ -26,34 +31,31 @@ import { watch } from 'vue'
 import {
   useCompletions,
   useCompletionStore,
+  useCompletionQuery,
 } from '~/composables/use-completions'
 import { useEditor } from '~/composables/use-editor'
+import refreshIcon from '~/assets/heroicons-refresh.svg'
 
 const { query, setQuery, showCompletionBox, setComplete } = useCompletionStore()
 const { completions, fetchCompletions, fetching } = useCompletions(query)
 const { editor } = useEditor()
+const { findQueryNodePosition } = useCompletionQuery()
 
-// TODO: sort completion by score
 watch(query, fetchCompletions)
 
 const complete = (completionPhrase) => {
-  const KEYWORD = 'i pick you '
   const doc = editor.value.getJSON()
   const paragraphContent = doc.content[0]
+  const queryNodePosition = findQueryNodePosition(doc)
 
-  const queryNodePosition =
-    paragraphContent.content.findIndex(
-      (content) => content.text.toLowerCase() === KEYWORD
-    ) + 1
-
-  if (paragraphContent.content[queryNodePosition]) {
+  if (queryNodePosition > -1 && paragraphContent.content[queryNodePosition]) {
     paragraphContent.content[queryNodePosition].text = completionPhrase
     doc.content[0] = paragraphContent
     editor.value.commands.setContent(doc)
+    editor.value.commands.focus()
+    setQuery('')
+    setComplete()
   }
-
-  setQuery('')
-  setComplete()
 }
 </script>
 
