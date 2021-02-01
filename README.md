@@ -8,6 +8,6 @@ Implementation of a autocompletion box using Vue 3, Vite, Tailwind, Tiptap edito
 
 
 ## TODOs
-[] Improve keyboard navigation in the autocompletion box (e.g: arrows keys)
-[] Add debounce function to fetch API in order to reduce backend load
-[] Improve autocompletion box placement depends on where the input is placed (e.g: using Vue Tooltip)
+- [ ] Improve keyboard navigation in the autocompletion box (e.g: arrows keys)
+- [ ] Add debounce function to fetch API in order to reduce backend load
+- [ ] Improve autocompletion box placement depends on where the input is placed (e.g: using Vue Tooltip)
