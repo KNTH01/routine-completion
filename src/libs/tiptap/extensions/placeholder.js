@@ -16,26 +16,4 @@ export const PlaceholderExtension = Extension.create({
       this.editor.commands.setContent(placeholder)
     }
   },
-
-  addCommands() {
-    return {
-      isEmptyWithPlaceholder(toto) {
-        console.log('toto :>> ', toto)
-
-        return true
-      },
-
-      // setTextAlign: (alignment: string): Command => ({ commands }) => {
-      //   if (!this.options.alignments.includes(alignment)) {
-      //     return false
-      //   }
-
-      //   return this.options.types.every(type => commands.updateNodeAttributes(type, { textAlign: alignment }))
-      // },
-
-      // unsetTextAlign: (): Command => ({ commands }) => {
-      //   return this.options.types.every(type => commands.resetNodeAttributes(type, 'textAlign'))
-      // },
-    }
-  },
 })
